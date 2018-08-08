@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import com.google.inject.Singleton;
 
 import rx.Observable;
-import suzart.clients.wheather.WeatherClient;
+import suzart.jooby.clients.openwheather.WeatherClient;
 
 @Singleton
 public class WeatherAvgService {

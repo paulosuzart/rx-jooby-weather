@@ -10,7 +10,7 @@ import org.jooby.Jooby;
 
 import static org.asynchttpclient.Dsl.*;
 
-import suzart.clients.wheather.WeatherClient;
+import suzart.jooby.clients.openwheather.WeatherClient;
 import suzart.jooby.controllers.WeatherAvgController;
 import suzart.jooby.services.WeatherAvgService;
 

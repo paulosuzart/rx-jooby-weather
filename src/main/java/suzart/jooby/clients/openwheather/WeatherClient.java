@@ -1,16 +1,12 @@
-package suzart.clients.wheather;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.typesafe.config.Config;
-
-import static org.asynchttpclient.Dsl.*;
+package suzart.jooby.clients.openwheather;
 
 import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.annotation.PostConstruct;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.BoundRequestBuilder;
