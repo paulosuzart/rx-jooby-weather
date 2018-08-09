@@ -1,13 +1,12 @@
 package suzart.jooby.services;
 
-import java.util.List;
+import com.google.inject.Singleton;
+import rx.Observable;
+import rx.observables.MathObservable;
+import suzart.jooby.clients.openwheather.WeatherClient;
 
 import javax.inject.Inject;
-
-import com.google.inject.Singleton;
-
-import rx.Observable;
-import suzart.jooby.clients.openwheather.WeatherClient;
+import java.util.List;
 
 @Singleton
 public class WeatherAvgService {
@@ -16,11 +15,7 @@ public class WeatherAvgService {
     private WeatherClient weatherClient;
 
     public Observable<Double> getAvg(List<String> cities) {
-        weatherClient.getTemperatureByCityName("London,uk").subscribe(System.out::println, 
-        throwable -> {
-            throwable.printStackTrace();
-        }); 
-        
-        return Observable.just(Double.valueOf(22.2)).single();
+        Observable<Double> doubleObservable = MathObservable.averageDouble(Observable.from(cities).flatMap(weatherClient::getTemperatureByCityName));
+        return doubleObservable;
     }
 }

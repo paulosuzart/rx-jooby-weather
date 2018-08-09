@@ -1,43 +1,30 @@
 package suzart.jooby.clients.openwheather;
 
-import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.BoundRequestBuilder;
+import rx.Observable;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.BoundRequestBuilder;
-import org.asynchttpclient.extras.rxjava.AsyncHttpObservable;
-
-import rx.Observable;
-
 public class WeatherClient {
-    private String urlTemplate = "https://api.openweathermap.org/data/2.5/weather?q=%s&main.tem=Celsius&APPID=%s";
+
+    private String byNameTemplate = "https://api.openweathermap.org/data/2.5/weather?q=%s&main.tem=Celsius&APPID=%s";
 
     @Inject
     private AsyncHttpClient asyncHttpClient;
 
-	private final String apiKey;
+    private final String apiKey;
 
     @Inject
     public WeatherClient(@Named("apikey") String apiKey) {
         this.apiKey = apiKey;
     }
 
-    public Observable<JsonNode> getTemperatureByCityName(String city) {
-        
-        BoundRequestBuilder builder = asyncHttpClient.prepareGet(String.format(urlTemplate, city, this.apiKey));
-        ObjectMapper objectMapper = new ObjectMapper();
-        return AsyncHttpObservable.toObservable(() -> builder).flatMap(response -> {
-            try {
-                return Observable.just(objectMapper.readTree(response.getResponseBodyAsStream()));
-            } catch (IOException e) {
-                // TODO: Log here
-                return Observable.error(e);
-            }
-        });
+    public Observable<Double> getTemperatureByCityName(String city) {
+        BoundRequestBuilder builder = asyncHttpClient.prepareGet(String.format(byNameTemplate, city, this.apiKey));
+        return new WeatherCommand(builder, city).toObservable()
+                .flatMap(body -> Observable.just(body.get("main").get("temp").asDouble()));
     }
 }

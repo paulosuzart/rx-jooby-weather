@@ -25,6 +25,6 @@ public class WeatherAvgController {
     @Consumes("json")
     @Produces("json")
     public Observable<AvgResult> avg(List<String> cities) {
-        return weatherAvgService.getAvg(cities).single().map(avg -> new AvgResult(cities, avg));
+        return weatherAvgService.getAvg(cities).map(avg -> new AvgResult(cities, avg));
     }
 }

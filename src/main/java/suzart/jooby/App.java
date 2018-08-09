@@ -15,7 +15,6 @@ public class App extends Jooby {
     use(new Rx());
     use(new Jackson());
     use(new WeatherModule());
-    //use(WeatherAvgController.class);
   }
 
   public static void main(String[] args) {

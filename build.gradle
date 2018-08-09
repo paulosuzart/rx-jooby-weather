@@ -44,10 +44,13 @@ dependencies {
   compile "io.netty:netty-tcnative-boringssl-static:${dependencyManagement.importedProperties['boringssl.version']}" 
   compile group: "org.asynchttpclient", name: "async-http-client", version: "2.5.2"
   compile group: "org.asynchttpclient", name: "async-http-client-extras-rxjava", version: '2.5.2'
+  compile "com.netflix.hystrix:hystrix-core:1.5.12"
+  compile group: 'io.reactivex', name: 'rxjava-math', version: '1.0.0'
 
 
 
-  testCompile "junit:junit:4.12"
+
+    testCompile "junit:junit:4.12"
   testCompile "io.rest-assured:rest-assured:3.1.0"
 }
 
