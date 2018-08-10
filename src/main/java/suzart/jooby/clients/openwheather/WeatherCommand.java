@@ -5,28 +5,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandProperties;
 import com.netflix.hystrix.HystrixObservableCommand;
-import jdk.nashorn.internal.ir.ObjectNode;
 import org.asynchttpclient.BoundRequestBuilder;
-import org.asynchttpclient.Response;
 import org.asynchttpclient.extras.rxjava.AsyncHttpObservable;
 import rx.Observable;
-import rx.exceptions.Exceptions;
 
 import java.io.IOException;
 
 
 public class WeatherCommand extends HystrixObservableCommand<JsonNode> {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(WeatherCommand.class);
+    public static final String WEATHER_COMMAND_KEY = "weather-commands";
 
     private final BoundRequestBuilder boundRequestBuilder;
     private final String city;
 
     WeatherCommand(BoundRequestBuilder boundRequestBuilder, String city) {
 
-        super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("weather-commands"))
+        super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(WEATHER_COMMAND_KEY))
                 .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
                         .withExecutionTimeoutInMilliseconds(5000)
-                        .withCircuitBreakerErrorThresholdPercentage(5)
                         .withExecutionIsolationStrategy(
                                 HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE)));
 
