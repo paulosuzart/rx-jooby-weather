@@ -12,6 +12,7 @@ import org.jooby.mvc.Path;
 import org.jooby.mvc.Produces;
 
 import rx.Observable;
+import suzart.jooby.services.AvgResult;
 import suzart.jooby.services.WeatherAvgService;
 
 @Path("/weather/avg")
@@ -25,6 +26,6 @@ public class WeatherAvgController {
     @Consumes("json")
     @Produces("json")
     public Observable<AvgResult> avg(List<String> cities) {
-        return weatherAvgService.getAvg(cities).map(avg -> new AvgResult(cities, avg));
+        return weatherAvgService.getAvg(cities);
     }
 }

@@ -14,7 +14,9 @@ import rx.exceptions.Exceptions;
 
 import java.io.IOException;
 
+
 public class WeatherCommand extends HystrixObservableCommand<JsonNode> {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(WeatherCommand.class);
 
     private final BoundRequestBuilder boundRequestBuilder;
     private final String city;
@@ -24,7 +26,8 @@ public class WeatherCommand extends HystrixObservableCommand<JsonNode> {
         super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("weather-commands"))
                 .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
                         .withExecutionTimeoutInMilliseconds(5000)
-                        .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE)));
+                        .withExecutionIsolationStrategy(
+                                HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE)));
 
         this.boundRequestBuilder = boundRequestBuilder;
         this.city = city;
@@ -36,18 +39,17 @@ public class WeatherCommand extends HystrixObservableCommand<JsonNode> {
 
         return AsyncHttpObservable.toObservable(() -> boundRequestBuilder).single().flatMap(response -> {
             if (response.getStatusCode() != 200) {
+                log.warn("no 200 on getting data for {}. Ignoring...", this.city);
                 return Observable.error(new Exception("Unable to fetch for " + this.city));
             }
-            System.out.println(response.getStatusCode());
+
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode tree = objectMapper.readTree(response.getResponseBodyAsStream());
-                System.out.println("Ja mapeout");
-                System.out.println(tree.toString());
-
+                log.info("Got 200 and json response for key {}", this.city);
                 return Observable.just(tree);
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("Failed to parse response for " + this.city, e);
                 return Observable.error(e);
             }
         });
@@ -55,7 +57,7 @@ public class WeatherCommand extends HystrixObservableCommand<JsonNode> {
 
     @Override
     protected Observable<JsonNode> resumeWithFallback() {
-        System.out.println("Veio no fall" + this.boundRequestBuilder.toString());
+        log.warn("Falling back to default value for city {}", this.city);
         return Observable.empty();
     }
 }

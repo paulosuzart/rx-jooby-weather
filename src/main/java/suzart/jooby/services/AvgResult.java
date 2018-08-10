@@ -1,4 +1,4 @@
-package suzart.jooby.controllers;
+package suzart.jooby.services;
 
 import java.io.Serializable;
 import java.util.List;
