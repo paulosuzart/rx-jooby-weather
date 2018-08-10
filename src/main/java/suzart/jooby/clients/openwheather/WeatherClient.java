@@ -11,7 +11,7 @@ import javax.inject.Named;
 
 public class WeatherClient {
 
-    private String byNameTemplate = "https://api.openweathermap.org/data/2.5/weather?q=%s&main.temp=Celsius&APPID=%s";
+    private String byNameTemplate = "https://api.openweathermap.org/data/2.5/wseather?q=%s&main.temp=Celsius&APPID=%s";
 
     @Inject
     private AsyncHttpClient asyncHttpClient;

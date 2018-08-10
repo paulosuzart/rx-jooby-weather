@@ -26,6 +26,7 @@ public class WeatherCommand extends HystrixObservableCommand<JsonNode> {
         super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("weather-commands"))
                 .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
                         .withExecutionTimeoutInMilliseconds(5000)
+                        .withCircuitBreakerErrorThresholdPercentage(5)
                         .withExecutionIsolationStrategy(
                                 HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE)));
 

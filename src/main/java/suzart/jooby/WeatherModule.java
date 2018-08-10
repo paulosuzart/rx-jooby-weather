@@ -8,6 +8,7 @@ import suzart.jooby.clients.openwheather.WeatherClient;
 import suzart.jooby.clients.openwheather.WeatherCommand;
 import suzart.jooby.controllers.WeatherAvgController;
 import suzart.jooby.services.WeatherAvgService;
+import suzart.jooby.utils.UnableToProcessMessage;
 
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
@@ -24,7 +25,8 @@ public class WeatherModule implements Jooby.Module {
 
         env.router().err(IllegalArgumentException.class, (req, res, err) -> {
             log.error("Unable to process request due to: {}", err.getCause().getMessage());
-            res.send(Results.with(Status.BAD_REQUEST));
+            res.send(Results.json(new UnableToProcessMessage()));
+
         });
 
         env.onStop(registry -> {
