@@ -23,7 +23,7 @@ public class WeatherModule implements Jooby.Module {
         env.lifeCycle(WeatherClient.class);
 
         env.router().err(IllegalArgumentException.class, (req, res, err) -> {
-            log.error("Unable to process request due to", err.getMessage());
+            log.error("Unable to process request due to: {}", err.getCause().getMessage());
             res.send(Results.with(Status.BAD_REQUEST));
         });
 
