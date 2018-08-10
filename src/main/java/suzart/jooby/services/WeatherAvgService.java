@@ -35,8 +35,5 @@ public class WeatherAvgService {
             return doubleObservable.zipWith(validCities, (avg, c) -> new AvgResult(c, avg));
 
         });
-
     }
-
-
 }
